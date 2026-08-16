@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Index Laws</title>
+<style>
+:root{--a:#2596be;--ad:#1c6f8d;--ink:#1f2937;--muted:#667085;--bg:#f6f8fb;--card:#fff;--line:#dde5ea;--soft:#eaf6fb;--ok:#eaf7ec;--bad:#fdeceb;--warn:#fff5dd}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,Segoe UI,sans-serif}button{font:inherit;cursor:pointer}.math,.math *{font-family:"Cambria Math",Cambria,serif}
+header{background:linear-gradient(135deg,#1f6e8b,var(--a));color:#fff;text-align:center;padding:34px 18px 28px}header h1{margin:0;font-size:clamp(2rem,5vw,3rem)}header p{margin:7px auto 0;max-width:720px}
+.sticky{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+.nav-wrap{max-width:800px;margin:auto;padding:5px 10px 3px}
+.tab-row{display:flex;justify-content:center;align-items:center;gap:4px;padding:2px 0;min-width:0;flex-wrap:nowrap}
+
+.tab-row button{border:0;background:transparent;color:var(--muted);padding:6px 9px;border-radius:8px;font-size:.86rem;font-weight:700;white-space:nowrap;min-width:0}
+.tab-row button.active,.tab-row button:hover{background:var(--soft);color:var(--ad)}
+.tab-row .icon-tab{line-height:1;min-width:36px;padding:6px 7px;display:inline-flex;align-items:center;justify-content:center}.tab-row .icon-tab svg{width:18px;height:18px;display:block;margin:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab-row .visited::after{content:"•";display:inline-block;margin-left:5px;color:var(--a);font-size:11px;line-height:1;vertical-align:middle}
+.tab-row .complete::after{content:"✓";display:inline-block;margin-left:5px;color:#2e7d32;font-size:11px;line-height:1;vertical-align:middle}
+.progress{max-width:800px;margin:auto;padding:1px 16px 10px}.prow{display:flex;justify-content:space-between;gap:10px;font-size:.77rem;color:var(--muted);margin-bottom:5px}.track{height:8px;background:#e7edf1;border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:var(--a);transition:.25s}.reset{border:0;background:none;color:var(--ad);font-weight:700;padding:0}.reset-icon{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:1.15rem}.reset-icon:hover{background:var(--soft)}
+main{width:min(94vw,800px);margin:26px auto 42px}.section{display:none}.section.active{display:block}.panel{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:23px;margin-bottom:18px}h2{margin:0 0 7px;font-size:1.75rem}h3{margin:0 0 9px}.lead{color:var(--muted);margin-top:0}.badge{display:inline-block;background:var(--soft);color:var(--ad);border-radius:999px;padding:4px 9px;font-size:.72rem;font-weight:800;text-transform:uppercase}
+.step{display:flex;align-items:center;gap:9px;margin-bottom:12px}.n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--a);color:#fff;font-weight:800}.notice{border-left:5px solid var(--a);background:#fbfdfe;border-radius:11px;padding:16px}.rule{background:var(--soft);border:1px solid #cae6f1;border-radius:13px;padding:18px;text-align:center;font-size:1.4rem}.small{border:1px solid var(--a);background:#fff;color:var(--ad);border-radius:9px;padding:8px 11px;font-weight:700}.why{display:none;margin-top:11px;padding:13px;border:1px solid var(--line);border-radius:11px;background:#fafcfd}.why.show{display:block}
+.mcq{display:grid;gap:8px}.mcq button{text-align:left;border:1px solid var(--line);background:#fff;padding:10px 12px;border-radius:10px}.mcq .correct{background:var(--ok);border-color:#8bc89b}.mcq .wrong{background:var(--bad);border-color:#efaaa4}.feedback{min-height:22px;margin-top:8px;font-size:.9rem;color:var(--muted)}
+.locked{position:relative}.locked.lock .inside{opacity:.35;pointer-events:none}.overlay{display:none;position:absolute;inset:0;z-index:2;justify-content:center;padding-top:35px}.locked.lock .overlay{display:flex}.overlay span{height:max-content;background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 13px;font-weight:700;color:var(--ad)}
+.examples{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.ex{border:1px solid var(--line);border-radius:13px;overflow:hidden}.lvl{padding:8px 10px;font-size:.75rem;font-weight:800;text-transform:uppercase}.easy{background:var(--ok);color:#2e7d32}.med{background:var(--warn);color:#a86500}.hard{background:var(--bad);color:#b42318}.q{min-height:70px;display:grid;place-items:center;text-align:center;padding:15px 9px;font-size:1.15rem}.reveal{margin:0 9px 9px;width:calc(100% - 18px);border:1px solid var(--a);background:#fff;color:var(--ad);border-radius:8px;padding:7px;font-weight:700}.solution{display:none;border-top:1px solid var(--line);padding:11px;background:#fafcfd}.solution.show{display:block}.sub{font-weight:800;margin:17px 0 9px}.mistake,.tip{border-left:5px solid;border-radius:11px;padding:14px 16px}.mistake{background:var(--bad);border-color:#b42318}.tip{background:var(--warn);border-color:#d48b13;margin-top:11px}
+table{width:100%;border-collapse:collapse}th,td{padding:10px 7px;border-bottom:1px solid var(--line);text-align:left}th{font-size:.8rem;color:var(--muted)}.drop{min-height:40px;border:2px dashed #cdd6dc;border-radius:9px;padding:6px;background:#fbfcfd}.drop.correct{background:var(--ok);border-color:#72b982}.drop.incorrect{background:var(--bad);border-color:#de8d86}.bank{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0}.chip{border:1px solid #bcdbe7;background:var(--soft);color:#1c6079;border-radius:9px;padding:8px 6px;font-weight:700;min-height:42px}.chip.selected{outline:3px solid rgba(37,150,190,.22)}
+.frac{display:inline-grid;grid-template-rows:auto auto;text-align:center;vertical-align:middle;line-height:1.08;margin:0 .14em}.frac>.top{border-bottom:1.5px solid currentColor;padding:0 .2em .1em}.frac>.bottom{padding:.1em .2em 0}.mathline{text-align:center;font-size:1.15rem;margin:10px 0}.cross{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#b42318}
+.indices{display:grid;grid-template-columns:1fr 1fr;gap:14px}.demo{border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center}.big{font-size:3rem;margin:15px}.labels{display:grid;grid-template-columns:1fr 1fr;gap:8px}.label{background:var(--soft);border-radius:9px;padding:8px}.root-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.root-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.page-nav{display:flex;justify-content:space-between;gap:10px;margin:18px 0}.page-nav button{border:1px solid var(--a);background:#fff;color:var(--ad);border-radius:9px;padding:8px 12px;font-weight:750}.page-nav button.next{background:var(--a);color:#fff}
+.overview-all{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.overview-tile{border:1px solid var(--line);border-radius:14px;background:#fff;min-height:145px;padding:15px}.overview-tile button{border:0;background:none;padding:0;width:100%;height:100%;text-align:left;color:inherit;display:flex;flex-direction:column}.overview-tile p{color:var(--muted);font-size:.9rem;margin:7px 0}.overview-tile .status-pill{margin-top:auto;align-self:flex-start}.overview-foundation{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff;margin:14px 0}
+.overview-foundation button{border:0;background:none;padding:0;text-align:left;width:100%;color:inherit}
+.law-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+.law-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:15px;text-align:left;position:relative}
+.law-card button{border:0;background:none;padding:0;width:100%;text-align:left;color:inherit}
+.law-card .summary-rule{font-size:1.18rem;margin-top:7px;color:var(--ad)}
+.status-pill{display:inline-block;margin-top:10px;border-radius:999px;padding:4px 8px;font-size:.72rem;font-weight:800;background:#f2f4f7;color:#667085}
+.status-pill.vis{background:var(--soft);color:var(--ad)}.status-pill.done{background:var(--ok);color:#2e7d32}.status-pill.vis::after{content:" •"}.status-pill.done::after{content:" ✓"}
+.overview-review{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.overview-review button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;text-align:left;color:inherit;font-weight:700}.real-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.real-card{border:1px solid var(--line);border-radius:13px;padding:15px;background:#fff}.real-card h3{color:var(--ad)}
+.plain-practice .band{border-top:3px solid var(--a);padding-top:12px;margin-top:20px}.plain-practice ol{padding-left:28px}.plain-practice li{padding:7px 4px}.answers{display:none;background:#fafcfd;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px}.answers.show{display:block}.answer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.answer-item{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px}.reflection{display:none;margin-top:14px;padding:14px;border:1px solid #cfe4ec;background:var(--soft);border-radius:12px}.reflection.show{display:block}.reflection-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.reflection-note{margin-top:8px;font-size:.9rem;color:var(--muted)}
+.quiz-card{border:1px solid var(--line);border-radius:14px;padding:18px}.quiz-options{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.quiz-options button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px;text-align:center;min-height:54px}.quiz-options button.correct{background:var(--ok);border-color:#72b982}.quiz-options button.wrong{background:var(--bad);border-color:#de8d86}.quiz-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem;margin-bottom:10px}.badge-result{text-align:center;background:var(--soft);border:1px solid #c9e6f0;border-radius:16px;padding:22px;margin-top:18px}
+.glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.glossary-card{border:1px solid var(--line);border-radius:13px;padding:15px;background:#fff}.glossary-card b{color:var(--ad)}footer{text-align:center;color:var(--muted);font-size:.70rem;padding:0 12px 28px}
+@media(max-width:860px){.nav-row{grid-template-columns:78px 1fr}.nav-buttons{flex-wrap:wrap}.bank{grid-template-columns:repeat(3,1fr)}.law-summary{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.overview-all{grid-template-columns:repeat(2,1fr);gap:8px}.overview-tile{min-height:132px;padding:11px}.overview-tile .summary-rule{font-size:1rem}.overview-tile p{font-size:.78rem}.examples,.indices,.root-grid,.real-grid,.glossary-grid,.law-summary{grid-template-columns:1fr}.overview-review{grid-template-columns:1fr}.prow{flex-direction:column}.panel{padding:19px}.quiz-options{grid-template-columns:repeat(2,1fr)}.bank{grid-template-columns:repeat(2,1fr)}.answer-grid{grid-template-columns:repeat(2,1fr)}.nav-row{grid-template-columns:1fr}.nav-label{padding:5px 4px 0}.nav-buttons{flex-wrap:wrap}}
+
+#qnext{display:none;width:100%;margin-top:14px;padding:11px 14px;background:var(--a);color:#fff;border-color:var(--a)}
+.workline{margin-top:8px}.solution .math+.math{margin-top:8px}
+.celebrate{position:fixed;inset:0;z-index:100;pointer-events:none;display:grid;place-items:center;background:rgba(255,255,255,.12)}
+.celebrate-card{background:#fff;border:2px solid var(--a);border-radius:18px;padding:20px 28px;box-shadow:0 14px 40px rgba(31,41,55,.18);font-weight:850;color:var(--ad);font-size:1.25rem;animation:pop .35s ease}
+.spark{position:absolute;font-size:1.4rem;animation:burst 1.6s ease-out forwards}
+@keyframes pop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes burst{0%{transform:translate(0,0) scale(.4);opacity:0}20%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(240deg);opacity:0}}
+
+@media(max-width:700px){.overview-all{grid-template-columns:repeat(2,1fr);gap:8px}.overview-tile{min-height:132px;padding:11px}.overview-tile .summary-rule{font-size:1rem}.overview-tile p{font-size:.78rem}
+  header{padding:20px 12px 17px}
+  .sticky{position:sticky;top:0}
+  .nav-wrap{padding:4px 5px 2px}
+  .tab-row{gap:1px;justify-content:center;flex-wrap:wrap}
+  .tab-row button{font-size:.69rem;padding:6px 5px}
+  .tab-row .icon-tab{font-size:.92rem;min-width:29px;padding:6px 4px}
+  .progress{padding:1px 8px 7px}
+  .prow{font-size:.70rem;flex-direction:row;flex-wrap:wrap;align-items:center;gap:3px 8px}
+  .prow #ptext{flex:1 1 240px}
+  .page-nav button{padding:6px 9px;font-size:.78rem}
+}
+.set-tabs{display:flex;gap:8px;margin:12px 0 4px}.set-tabs .active{background:var(--a);color:#fff}.set-tabs button{flex:1}
+.glossary-check{margin-top:22px;border-top:1px solid var(--line);padding-top:20px}.glossary-check .small{margin-top:14px}
+.cloze-row{padding:11px 0;border-bottom:1px solid #eef2f4}
+.cloze-options{display:inline-flex;gap:6px;margin:0 4px;vertical-align:middle}
+.cloze-options button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 9px;font-weight:700;color:var(--muted)}
+.cloze-options button.selected{border-color:var(--a);background:var(--soft);color:var(--ad)}
+.cloze-options button.correct{background:var(--ok);border-color:#8bc89b;color:#2e7d32}
+.cloze-options button.wrong{background:var(--bad);border-color:#efaaa4;color:#b42318}
+
+.indices-check{margin-top:22px;border-top:1px solid var(--line);padding-top:20px}.indices-check .small{margin-top:14px}
+.tf-row{padding:11px 0;border-bottom:1px solid #eef2f4}
+.tf-options{display:inline-flex;gap:7px;margin-left:8px}
+.tf-options button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;font-weight:700;color:var(--muted)}
+.tf-options button.selected{border-color:var(--a);background:var(--soft);color:var(--ad)}
+.tf-options button.correct{background:var(--ok);border-color:#8bc89b;color:#2e7d32}
+.tf-options button.wrong{background:var(--bad);border-color:#efaaa4;color:#b42318}
+
+.real-check{margin-top:22px;border-top:1px solid var(--line);padding-top:20px}
+.real-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0;align-items:stretch}
+.real-options button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px;text-align:left;font-weight:700;color:var(--muted);min-height:62px;height:100%;display:flex;align-items:center}
+.real-options button.selected{border-color:var(--a);background:var(--soft);color:var(--ad)}
+.real-options button.correct{background:var(--ok);border-color:#8bc89b;color:#2e7d32}
+.real-options button.wrong{background:var(--bad);border-color:#efaaa4;color:#b42318}
+@media(max-width:520px){.real-options{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>Index Laws</h1></header>
+<div class="sticky">
+<div class="nav-wrap" aria-label="Main navigation">
+  <div class="tab-row">
+    <button class="active icon-tab" data-target="overview" title="Overview" aria-label="Overview"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></button>
+    <button class="icon-tab" data-target="realworld" title="Real World" aria-label="Real World"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4c2.5 2.4 3.5 5 3.5 8s-1 5.6-3.5 8"/><path d="M12 4c-2.5 2.4-3.5 5-3.5 8s1 5.6 3.5 8"/></svg></button>
+    <button class="icon-tab" data-target="glossary" title="Glossary" aria-label="Glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5c3-.8 5.5-.3 8 1.7v11c-2.5-2-5-2.5-8-1.7z"/><path d="M20 5.5c-3-.8-5.5-.3-8 1.7v11c2.5-2 5-2.5 8-1.7z"/></svg></button>
+    <button data-target="indices">Indices</button>
+    <button data-target="product">Product</button>
+    <button data-target="quotient">Quotient</button>
+    <button data-target="power">Power to Power</button>
+    <button data-target="zero">Zero</button>
+    <button data-target="negative">Negative</button>
+    <button class="icon-tab" data-target="independent" title="Practice" aria-label="Practice"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><rect x="8" y="6" width="8" height="3" rx=".5"/><path d="M8 13h1M12 13h1M16 13h1M8 17h1M12 17h1M16 17h1"/></svg></button>
+    <button class="icon-tab" data-target="quiz" title="Quiz" aria-label="Quiz"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.8l2.5 5.1 5.6.8-4 3.9.9 5.5-5-2.6-5 2.6.9-5.5-4-3.9 5.6-.8z"/></svg></button>
+  </div>
+</div>
+<div class="progress"><div class="prow"><span id="ptext">0% complete</span><button id="reset" class="reset reset-icon" title="Reset progress" aria-label="Reset progress">↻</button></div><div class="track"><div id="bar" class="bar"></div></div></div>
+</div>
+<main>
+<section id="overview" class="section active"><div class="panel">
+<h2>Index Laws</h2>
+<p class="lead">Use this page as a quick revision guide, or choose a section to explore.</p>
+<div class="overview-all">
+<div class="overview-tile"><button data-target="indices"><b>Indices</b><div class="summary-rule math">2⁵ = 2 × 2 × 2 × 2 × 2 = 32</div><span class="status-pill" data-status="indices">Not explored</span></button></div>
+<div class="overview-tile"><button data-target="product"><b>Product Rule</b><div class="summary-rule math">aᵐ × aⁿ = aᵐ⁺ⁿ</div><span class="status-pill" data-status="product">Not explored</span></button></div>
+<div class="overview-tile"><button data-target="quotient"><b>Quotient Rule</b><div class="summary-rule math">aᵐ ÷ aⁿ = aᵐ⁻ⁿ</div><span class="status-pill" data-status="quotient">Not explored</span></button></div>
+<div class="overview-tile"><button data-target="power"><b>Power of a Power</b><div class="summary-rule math">(aᵐ)ⁿ = aᵐⁿ</div><span class="status-pill" data-status="power">Not explored</span></button></div>
+<div class="overview-tile"><button data-target="zero"><b>Zero Index</b><div class="summary-rule math">a⁰ = 1</div><span class="status-pill" data-status="zero">Not explored</span></button></div>
+<div class="overview-tile"><button data-target="negative"><b>Negative Indices</b><div class="summary-rule math">a⁻ⁿ = <span class="frac"><span class="top">1</span><span class="bottom">aⁿ</span></span></div><span class="status-pill" data-status="negative">Not explored</span></button></div>
+<div class="overview-tile"><button data-target="realworld"><b>Real World</b><p>See where powers and indices appear outside the classroom.</p><span class="status-pill" data-status="realworld">Not explored</span></button></div>
+<div class="overview-tile"><button data-target="glossary"><b>Glossary</b><p>Check the meaning of key mathematical words used in this resource.</p><span class="status-pill" data-status="glossary">Not attempted</span></button></div>
+<div class="overview-tile"><button data-target="independent"><b>Practice</b><p>Try a mixed set of questions independently, then check your answers.</p><span class="status-pill" data-status="independent">Not attempted</span></button></div>
+<div class="overview-tile"><button data-target="quiz"><b>Quiz</b><p>Test your understanding with multiple-choice questions across all five laws.</p><span class="status-pill" data-status="quiz">Not attempted</span></button></div>
+</div>
+</div></section>
+<section id="indices" class="section"><div class="panel"><span class="badge">Foundations</span><h2>Indices</h2><p class="lead">An index tells us how many times a base is used as a factor.</p><div class="indices">
+<div class="demo"><h3>Number base</h3><div class="big math">2⁵</div><div class="labels"><div class="label"><b>Base</b><br><span class="math">2</span></div><div class="label"><b>Index</b><br><span class="math">5</span></div></div><p class="math">2⁵ = 2 × 2 × 2 × 2 × 2 = 32</p></div>
+<div class="demo"><h3>Algebraic base</h3><div class="big math">a³</div><div class="labels"><div class="label"><b>Base</b><br><span class="math">a</span></div><div class="label"><b>Index</b><br><span class="math">3</span></div></div><p class="math">a³ = a × a × a</p></div>
+</div><div class="root-grid"><div class="root-card"><h3>Evaluate a power</h3><p>To <b>evaluate</b> means to work out its value.</p><p class="math">3⁴ = 3 × 3 × 3 × 3 = 81</p></div><div class="root-card"><h3>Powers and roots undo each other</h3><p>Squaring and square rooting are inverse operations.</p><p class="math">5² = 25 &nbsp; ↔ &nbsp; √25 = 5</p></div></div>
+<div class="indices-check" id="indicesCheck">
+  <div class="step"><span class="n">✓</span><h3>Quick check</h3></div>
+  <p class="lead">Decide whether each statement is true or false.</p>
+  <div id="indicesTF"></div>
+  <button class="small" id="checkIndicesTF" type="button">Check answers</button>
+  <div class="feedback" id="indicesTFFeedback"></div>
+</div></div></section>
+<section id="realworld" class="section"><div class="panel"><span class="badge">Why learn this?</span><h2>Where do we use indices?</h2><p class="lead">Indices are a compact way to describe repeated multiplication. They show up whenever quantities become very large, very small, or change quickly.</p><div class="real-grid">
+<div class="real-card"><h3>Science</h3><p>Scientists use powers of 10 to write enormous and tiny measurements clearly. For example, the speed of light is about <span class="math">3 × 10⁸ = 300&nbsp;000&nbsp;000</span> metres per second.</p></div>
+<div class="real-card"><h3>Computers</h3><p>Computer memory is built around powers of 2. Values such as <span class="math">2¹⁰ = 1024</span> appear because digital systems work with binary choices.</p></div>
+<div class="real-card"><h3>Growth</h3><p>If something doubles again and again, powers describe the pattern quickly: <span class="math">2¹ = 2, 2² = 4, 2³ = 8, 2⁴ = 16...</span></p></div>
+<div class="real-card"><h3>Area and volume</h3><p>Squares and cubes are powers too. A square with side length <span class="math">3 m</span> has area <span class="math">3² = 9 m²</span>. A cube with side length <span class="math">2 m</span> has volume <span class="math">2³ = 8 m³</span>.</p></div>
+</div><div class="tip"><b>So why Index Laws?</b><br>When powers appear together, Index Laws let us simplify them without writing every repeated factor. That makes complicated mathematics faster and easier to read.</div>
+<div class="real-check" id="realWorldCheck">
+  <div class="step"><span class="n">✓</span><h3>Apply what you read</h3></div>
+  <p class="lead">Select all the situations where powers or indices are commonly useful.</p>
+  <div class="real-options" id="realOptions"></div>
+  <button class="small" id="checkRealWorld" type="button">Check answers</button>
+  <div class="feedback" id="realFeedback"></div>
+</div></div></section>
+<section id="quiz" class="section"><div class="panel"><span class="badge">Quiz</span><h2>Index Laws Quiz</h2><p class="lead">Solve the following Index Laws questions. Choose the correct answer for each question.</p><div id="quizMount"></div></div></section>
+<section id="independent" class="section"><div class="panel plain-practice"><span class="badge">Independent Practice</span><h2>Mixed Practice</h2><p class="lead">No law names and no hints — decide which Index Law or laws you need.</p><div id="practiceSheet"></div><button class="small" id="showSheetAnswers">Show answers</button><div class="answers" id="sheetAnswers"></div><div class="reflection" id="practiceReflection"><b>How did you go?</b><p>Compare your work with the answers, then choose the statement that best matches your result.</p><div class="reflection-actions"><button class="small" id="practiceMajority">✓ I got most questions correct</button><button class="small" id="practiceMore">↻ I need more practice</button></div><div class="reflection-note" id="practiceReflectionNote"></div></div></div></section>
+<section id="glossary" class="section"><div class="panel"><h2>Glossary</h2><p class="lead">Key terminology used throughout Index Laws.</p><div class="glossary-grid" id="glossaryGrid"></div>
+<div class="glossary-check">
+  <div class="step"><span class="n">✓</span><h3>Check your vocabulary</h3></div>
+  <p class="lead">Choose the correct mathematical word in each sentence.</p>
+  <div id="clozeQuestions"></div>
+  <button class="small" id="checkCloze">Check answers</button>
+  <div class="feedback" id="clozeFeedback"></div>
+</div></div></section>
+<div id="laws"></div>
+</main>
+<footer>© Jadyn Thone.</footer>
+<script>
+const frac=(a,b)=>`<span class="frac"><span class="top">${a}</span><span class="bottom">${b}</span></span>`;
+const fmt=s=>String(s).replace(/([A-Za-z0-9⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺−]+|\([^()]+\))\/([A-Za-z0-9⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺−]+|\([^()]+\))/g,(m,a,b)=>frac(a,b));
+const L={
+product:{t:"Product Rule",r:"aᵐ × aⁿ = aᵐ⁺ⁿ",i:"When multiplying powers with the same base, add the indices.",n:'Let’s start with <span class="math">2³ × 2⁴</span>. The first power means <span class="math">2 × 2 × 2</span>, and the second means <span class="math">2 × 2 × 2 × 2</span>. Put them together. How many 2s are there altogether?',w:'<div class="mathline math">2³ × 2⁴</div><div class="mathline math">(2 × 2 × 2)(2 × 2 × 2 × 2)</div><div class="mathline math">= 2⁷</div><p>There are 7 factors of 2 altogether, so the indices add: <span class="math">3 + 4 = 7</span>.</p>',m:["When multiplying powers with the same base, what happens to the indices?",["Multiply them","Add them","Subtract them","Leave them unchanged"],1],num:[["2³ × 2⁴","2³⁺⁴","2⁷"],["3² × 3⁵ × 3","3²⁺⁵⁺¹","3⁸"],["2² × 2⁴ × 2³ × 2²","2²⁺⁴⁺³⁺²","2¹¹"]],alg:[["a² × a⁵","a²⁺⁵","a⁷"],["4a³ × 2a⁵","8a³⁺⁵","8a⁸"],["(3a²b³)(−2a⁵b⁴)","−6a²⁺⁵b³⁺⁴","−6a⁷b⁷"]],mist:'<span class="math">a³ × a⁴ = a¹²</span> is incorrect. Multiplying the indices belongs to the Power of a Power rule.',tip:"The Product Rule only works when the bases are the same.",p:[["2³ × 2²","2⁵"],["2⁴ × 2³","2⁷"],["a³ × a⁶","a⁹"],["3a² × 2a⁴","6a⁶"],["2a³b² × 5a⁴b","10a⁷b³"],["(a² × a⁵) × a³","a¹⁰"]]},
+quotient:{t:"Quotient Rule",r:`${frac('aᵐ','aⁿ')} = aᵐ⁻ⁿ`,i:"When dividing powers with the same base, subtract the indices.",n:`Look at <span class="math">${frac('2⁵','2²')}</span>. Write each power as repeated multiplication, then cancel matching 2s from the numerator and denominator.<div class="cancel-demo math" style="margin-top:16px">${frac('<span class="cross">2</span> × <span class="cross">2</span> × 2 × 2 × 2','<span class="cross">2</span> × <span class="cross">2</span>')}</div><p style="margin-bottom:0">What is left on the top?</p>`,w:`<div class="cancel-demo math">${frac('<span class="cross">2</span> × <span class="cross">2</span> × 2 × 2 × 2','<span class="cross">2</span> × <span class="cross">2</span>')}</div><p>Two matching factors cancel, leaving <span class="math">2 × 2 × 2 = 2³</span>. This is why <span class="math">5 − 2 = 3</span>.</p>`,m:["When dividing powers with the same base, what happens to the indices?",["Add them","Subtract them","Multiply them","Divide them"],1],num:[[frac('2⁷','2³'),"2⁷⁻³","2⁴"],[frac('3⁸','3² × 3'),"3⁸⁻³","3⁵"],[frac('2⁹ × 2²','2⁴'),"2⁹⁺²⁻⁴","2⁷"]],alg:[[frac('a⁸','a³'),"a⁸⁻³","a⁵"],[frac('12a⁷','3a²'),"4a⁷⁻²","4a⁵"],[frac('18a⁹b⁶','6a⁴b²'),"3a⁹⁻⁴b⁶⁻²","3a⁵b⁴"]],mist:'Do not subtract coefficients. In '+frac('12a⁵','3a²')+', calculate <span class="math">12 ÷ 3</span> for the coefficients.',tip:"Think division = cancellation, so fewer repeated factors remain.",p:[[frac('2⁶','2²'),"2⁴"],[frac('2⁷','2³'),"2⁴"],[frac('a⁹','a⁴'),"a⁵"],[frac('15a⁶','3a²'),"5a⁴"],[frac('20a⁷b⁵','4a²b³'),"5a⁵b²"],[frac('a⁸ × a³','a⁵'),"a⁶"]]},
+power:{t:"Power of a Power",r:"(aᵐ)ⁿ = aᵐⁿ",i:"When raising a power to another power, multiply the indices.",n:'Start with <span class="math">(2³)⁴</span>. The little 4 outside the brackets means the whole <span class="math">(2³)</span> happens four times. What happens when we write every group out?',w:'<div class="mathline math">(2³)⁴</div><div class="mathline math">= (2 × 2 × 2)(2 × 2 × 2)(2 × 2 × 2)(2 × 2 × 2)</div><div class="mathline math">= 2¹²</div><p>There are four groups of three 2s, so the indices multiply: <span class="math">3 × 4 = 12</span>.</p>',m:["For a power raised to another power, what happens to the indices?",["Subtract them","Add them","Multiply them","Divide them"],2],num:[["(2³)²","2³×²","2⁶"],["(3²)³","3²×³","3⁶"],["(2⁴)³","2⁴×³","2¹²"]],alg:[["(a²)⁴","a²×⁴","a⁸"],["(3a²)³","3³a²×³","27a⁶"],["(2a³b²)⁴","2⁴a³×⁴b²×⁴","16a¹²b⁸"]],mist:'The outside power applies to everything inside the brackets. For example, <span class="math">(3a²)³</span> means <span class="math">3³ × a⁶ = 27a⁶</span>. A common mistake is to cube the variable but forget to cube the 3.',tip:'Compare <span class="math">(2²)²</span> with <span class="math">(3a²)³</span>. In both cases the outside index applies to the entire bracket.',p:[["(2²)³","2⁶"],["(3²)²","3⁴"],["(a⁴)²","a⁸"],["(2a³)²","4a⁶"],["(3a²b)³","27a⁶b³"],[frac('(a²)³ × a⁴','a⁵'),"a⁵"]]},
+zero:{t:"Zero Index",r:"a⁰ = 1",i:"Any non-zero base raised to the power of zero equals 1.",n:'Watch the indices step down: <span class="math">2³ = 8, 2² = 4, 2¹ = 2</span>. Each time the index drops by 1, the value is divided by 2. What should <span class="math">2⁰</span> be?',w:'<div class="mathline math">2¹ = 2</div><div class="mathline math">2⁰ = 2 ÷ 2 = 1</div><p>The same pattern works for every non-zero base.</p>',m:["What is the value of a non-zero number raised to the power of zero?",["0","1","The base itself","It depends on the base"],1],num:[["7⁰","","1"],[frac('7³','7³'),"7³⁻³ = 7⁰","1"],["(3²)⁰","","1"]],alg:[["a⁰","","1"],[frac('a⁵','a⁵'),"a⁵⁻⁵ = a⁰","1"],["(4a²)⁰","","1"]],mist:"A zero index does not mean the answer is zero.",tip:"Zero indices often appear naturally when equal powers divide: the indices subtract to zero.",p:[["5⁰","1"],[frac('2⁴','2⁴'),"1"],[frac('a⁷','a⁷'),"1"]]},
+negative:{t:"Negative Indices",r:`a⁻ⁿ = ${frac('1','aⁿ')}`,i:"A negative index tells us that the power belongs on the other side of the fraction line, with a positive index.",n:'Watch the pattern as the index drops: <span class="math">2² = 4 → 2¹ = 2 → 2⁰ = 1 → 2⁻¹</span>. Each step divides the previous value by 2. So after 1, what do we get when we divide by 2 once more?',w:`<div class="mathline math">2² = 4 → 2¹ = 2 → 2⁰ = 1 → 2⁻¹ = ${frac('1','2')}</div><p>So a negative index does not make the number negative. It tells us where the power sits in a fraction.</p>`,m:["What does a negative index tell us to do?",["Make the answer negative","Move the power across the fraction line and make the index positive","Subtract from zero","Multiply by −1"],1],num:[["2⁻³",frac('1','2³'),frac('1','8')],["3⁻²",frac('1','3²'),frac('1','9')],["2⁻⁴",frac('1','2⁴'),frac('1','16')]],alg:[["a⁻²",frac('1','a²'),frac('1','a²')],["3a⁻²",frac('3','a²'),frac('3','a²')],["2a⁻³b²",frac('2b²','a³'),frac('2b²','a³')]],mist:`A negative index does not make the whole value negative. For example, <span class="math">2⁻³ = ${frac('1','8')}</span>, not <span class="math">−8</span>.`,tip:"If a factor with a negative index is on top of a fraction, move it below the fraction line and make the index positive.",p:[["2⁻²","1/4"],["2⁻³","1/8"],["a⁻³","1/a³"],["3a⁻²","3/a²"],["2a⁻²b³","2b³/a²"],[frac('(a³)² × a⁻⁴','a'),"a"]]}
+};
+const glossary={
+Base:'The number or algebraic expression being repeatedly multiplied. For example, in <span class="math">2⁵</span>, the base is 2.',
+"Index / Exponent / Power":'The small raised number shows how many times the base is used as a factor. For example, in <span class="math">3⁴</span>, the index is 4 and the power is <span class="math">3⁴</span>.',
+Indices:'The plural of index. For example, the 2 and 5 in <span class="math">a²</span> and <span class="math">b⁵</span> are indices.',
+Product:'The result of multiplication. For example, the product of 3 and 4 is 12.',
+Quotient:'The result of division. For example, the quotient of 12 and 3 is 4.',
+Factor:'A number or expression multiplied by another. For example, in <span class="math">3 × 5 = 15</span>, 3 and 5 are factors.',
+Coefficient:'The numerical factor multiplying an algebraic term. For example, in <span class="math">4a²</span>, the coefficient is 4.',
+Reciprocal:'A value flipped across a fraction line. For example, the reciprocal of <span class="math">'+frac('3','4')+'</span> is <span class="math">'+frac('4','3')+'</span>.',
+Numerator:'The top part of a fraction. For example, in <span class="math">'+frac('3','4')+'</span>, the numerator is 3.',
+Denominator:'The bottom part of a fraction. For example, in <span class="math">'+frac('3','4')+'</span>, the denominator is 4.',
+Evaluate:'To calculate the numerical value of an expression. For example, <span class="math">2⁵ = 2 × 2 × 2 × 2 × 2 = 32</span>.',
+Root:'An inverse operation of a power. For example, <span class="math">√25 = 5</span> because <span class="math">5² = 25</span>.',
+Simplify:'Rewrite an expression in an equivalent but simpler form. For example, <span class="math">a³ × a² = a⁵</span>.'
+};
+const P={v:JSON.parse(localStorage.getItem("il5_v")||"{}"),c:JSON.parse(localStorage.getItem("il5_c")||"{}"),p:JSON.parse(localStorage.getItem("il5_p")||"{}"),done:JSON.parse(localStorage.getItem("il5_done")||"{}")};
+function save(){localStorage.setItem("il5_v",JSON.stringify(P.v));localStorage.setItem("il5_c",JSON.stringify(P.c));localStorage.setItem("il5_p",JSON.stringify(P.p));localStorage.setItem("il5_done",JSON.stringify(P.done))}
+function shuffle(a){a=[...a];for(let i=a.length-1;i;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function exrow(a){return '<div class="examples">'+a.map((e,i)=>`<div class="ex"><div class="lvl ${["easy","med","hard"][i]}">${["Easy","Medium","Challenge"][i]}</div><div class="q math">${fmt(e[0])}</div><button class="reveal">Reveal working</button><div class="solution">${e[1]?`<div class="math workline">= ${fmt(e[1])}</div>`:""}<div class="math workline"><b>= ${fmt(e[2])}</b></div></div></div>`).join("")+"</div>"}
+function section(id,l){return `<section id="${id}" class="section"><div class="panel"><span class="badge">Index Law</span><h2>${l.t}</h2><div class="step"><span class="n">1</span><h3>What do you notice?</h3></div><div class="notice">${l.n}</div></div><div class="panel"><div class="step"><span class="n">2</span><h3>The rule</h3></div><div class="rule math">${fmt(l.r)}</div><p>${l.i}</p><button class="small whybtn">Why does this work?</button><div class="why">${l.w}</div></div><div class="panel"><div class="step"><span class="n">3</span><h3>Concept check</h3></div><p>${l.m[0]}</p><div class="mcq">${l.m[1].map((o,i)=>`<button data-i="${i}">${"ABCD"[i]}. ${o}</button>`).join("")}</div><div class="feedback"></div></div><div class="locked ${P.c[id]?"":"lock"}"><div class="overlay"><span>Complete the concept check to unlock the examples.</span></div><div class="inside"><div class="panel"><div class="step"><span class="n">4</span><h3>Worked questions</h3></div><div class="sub">Number bases</div>${exrow(l.num)}<div class="sub">Algebraic bases</div>${exrow(l.alg)}</div><div class="panel"><div class="step"><span class="n">5</span><h3>Common mistakes & tips</h3></div><div class="mistake"><b>Common mistake</b><br>${l.mist}</div><div class="tip"><b>Tip</b><br>${l.tip}</div></div><div class="panel"><div class="step"><span class="n">6</span><h3>Practice</h3></div><p class="lead">Drag an answer to a question, or click an answer and then click a question box.</p><table><thead><tr><th>#</th><th>Question</th><th>Your answer</th></tr></thead><tbody>${l.p.map((q,i)=>`<tr><td>${i+1}</td><td class="math">${fmt(q[0])}</td><td><div class="drop math" data-q="${i}" data-a=""></div></td></tr>`).join("")}</tbody></table><div class="sub">Answer bank</div><div class="bank">${shuffle(l.p.map(x=>x[1])).map(a=>`<button class="chip math" draggable="true" data-a="${a.replaceAll('"','&quot;')}">${fmt(a)}</button>`).join("")}</div><button class="small check">Check answers</button> <span class="feedback pfb"></span></div></div></div></section>`}
+document.getElementById("laws").innerHTML=Object.entries(L).map(([id,l])=>section(id,l)).join("");
+const sheet={"Simple Familiar - C Level":["2³ × 2⁴",frac('3⁶','3²'),"(2²)³","7⁰","2⁻³","a² × a⁵",frac('a⁸','a³'),"(a³)²","b⁰","a⁻²","3a² × 2a³",frac('12a⁶','3a²')],"Complex Familiar - B Level":["(2a³)²",frac('18a⁷b⁵','6a²b²'),"3a⁻²b³","(4a²b)³"],"Complex Unfamiliar - A Level":[frac('(2a³)⁴ × a⁰','8a⁶'),frac('(3a²)³','9a⁴'),"(2a⁻²b³)(3a⁵b⁻¹)",frac('(a⁵ ÷ a²)²','a³')]};
+const sheetAns=["2⁷","3⁴","2⁶","1","1/8","a⁷","a⁵","a⁶","1","1/a²","6a⁵","4a⁴","4a⁶","3a⁵b³","3b³/a²","64a⁶b³","2a⁶","3a²","6a³b²","a³"];
+const practiceSets=[
+{sheet:sheet,answers:sheetAns},
+{sheet:{
+"Simple Familiar - C Level":["3⁴ × 3²","5⁷ ÷ 5³","(2³)²","9⁰","2⁻³","a⁵ × a²","b⁹ ÷ b⁴","(p²)³","(4a)⁰","m⁻²","2a³ × 3a²","12b⁶ ÷ 3b²"],
+"Complex Familiar - B Level":["(3p²)³","4a⁵ × 2a³","18b⁷ ÷ 6b³","a⁻³ × a⁵"],
+"Complex Unfamiliar - A Level":[frac("(b²)⁴ × b³","b⁵"),frac("(2v³)² × v⁰","4v²"),frac("a⁷ × a⁻²","a³"),frac("(3m²)²","9m⁻¹")]
+},answers:["3⁶","5⁴","2⁶","1",frac("1","8"),"a⁷","b⁵","p⁶","1",frac("1","m²"),"6a⁵","4b⁴","27p⁶","8a⁸","3b⁴","a²","b⁶","v⁴","a²","m⁵"]},
+{sheet:{
+"Simple Familiar - C Level":["2⁵ × 2³","4⁸ ÷ 4⁵","(3²)³","12⁰","5⁻²","c⁴ × c³","d⁸ ÷ d²","(q³)²","(7b²)⁰","n⁻³","5c² × 2c⁴","21d⁷ ÷ 7d³"],
+"Complex Familiar - B Level":["(2q³)³","6c⁴ × 3c²","24d⁸ ÷ 6d⁴","n⁻² × n⁵"],
+"Complex Unfamiliar - A Level":[frac("(c³)³ × c²","c⁶"),frac("(3w²)² × w⁰","9w"),frac("d⁸ × d⁻³","d²"),frac("(2n³)²","4n⁻²")]
+},answers:["2⁸","4³","3⁶","1",frac("1","25"),"c⁷","d⁶","q⁶","1",frac("1","n³"),"10c⁶","3d⁴","8q⁹","18c⁶","4d⁴","n³","c⁵","w³","d³","n⁸"]}
+];
+let activePracticeSet=0;
+const setTabs=document.createElement('div');setTabs.className='set-tabs';
+setTabs.innerHTML='<button class="small active" data-set="0">Set 1</button><button class="small" data-set="1">Set 2</button><button class="small" data-set="2">Set 3</button>';
+practiceSheet.before(setTabs);
+function renderPracticeSet(idx){
+  activePracticeSet=idx;
+  const pack=practiceSets[idx];
+  let qn=1;
+  practiceSheet.innerHTML=Object.entries(pack.sheet).map(([k,arr])=>`<div class="band"><h3>${k}</h3><ol start="${qn}">${arr.map(x=>{qn++;return `<li class="math">${fmt(x)}</li>`}).join("")}</ol></div>`).join("");
+  sheetAnswers.innerHTML='<div class="answer-grid">'+pack.answers.map((a,i)=>`<div class="answer-item math"><b>${i+1}.</b> ${fmt(a)}</div>`).join('')+'</div>';
+  sheetAnswers.classList.remove('show');practiceReflection.classList.remove('show');showSheetAnswers.textContent='Show answers';
+  setTabs.querySelectorAll('button').forEach(b=>{b.classList.toggle('active',+b.dataset.set===idx);if(P.done['set'+b.dataset.set])b.textContent=`Set ${+b.dataset.set+1} ✓`;else b.textContent=`Set ${+b.dataset.set+1}`});
+}
+setTabs.addEventListener('click',e=>{if(e.target.dataset.set!==undefined)renderPracticeSet(+e.target.dataset.set)});
+showSheetAnswers.addEventListener('click',()=>{sheetAnswers.classList.toggle('show');practiceReflection.classList.toggle('show',sheetAnswers.classList.contains('show'));showSheetAnswers.textContent=sheetAnswers.classList.contains('show')?'Hide answers':'Show answers';});
+practiceMajority.addEventListener('click',()=>{P.done.independent=1;P.done['set'+activePracticeSet]=1;practiceReflectionNote.textContent='Practice set marked complete. Nice work checking your answers.';save();upd();renderPracticeSet(activePracticeSet)});
+practiceMore.addEventListener('click',()=>{practiceReflectionNote.textContent='Review any laws you found difficult, or try another practice set.';save();upd()});
+renderPracticeSet(0);
+const quizBase=[
+["2³ × 2⁵",["2⁸","2¹⁵","4⁸","2²"],"2⁸","product"],[frac('a⁷','a³'),["a¹⁰","a⁴","a²¹","4a"],"a⁴","quotient"],["(3²)³",["3⁵","3⁶","9³","6³"],"3⁶","power"],["12⁰",["0","1","12","−12"],"1","zero"],["2⁻³",["−8","1/6","1/8","8"],"1/8","negative"],
+["3a² × 4a⁵",["7a⁷","12a¹⁰","12a⁷","12a³"],"12a⁷","product"],[frac('18a⁸','6a³'),["3a⁵","12a⁵","3a¹¹","3a²⁴"],"3a⁵","quotient"],["(2a³)²",["2a⁶","4a⁵","4a⁶","4a⁹"],"4a⁶","power"],[frac('7⁴','7⁴'),["0","1","7","7⁸"],"1","zero"],["3a⁻²",["−3a²","3/a²","1/(3a²)","a²/3"],"3/a²","negative"],
+["2a³b² × 5a⁴b³",["10a⁷b⁵","7a⁷b⁵","10a¹²b⁶","10a⁷b⁶"],"10a⁷b⁵","product"],[frac('20a⁹b⁵','4a⁴b²'),["5a⁵b³","16a⁵b³","5a¹³b⁷","5a⁵b⁷"],"5a⁵b³","quotient"],["(3a²b)³",["9a⁶b³","27a⁵b³","27a⁶b³","27a⁶b"],"27a⁶b³","power"],["(5a³)⁰",["0","1","5","a³"],"1","zero"],[frac('(2a³)⁴ × a⁰','8a⁶'),["2a⁶","8a⁶","2a¹²","a⁶/2"],"2a⁶","mixed"]];
+let quizQs=[],qi=0,score=0,miss=[];
+
+let celebrated100=false;
+function celebrate(message){
+  const old=document.querySelector('.celebrate'); if(old) old.remove();
+  const wrap=document.createElement('div'); wrap.className='celebrate';
+  wrap.innerHTML=`<div class="celebrate-card">${message}</div>`;
+  const marks=['✦','★','●','✧','◆','✦','★','●'];
+  marks.forEach((m,i)=>{let sp=document.createElement('span');sp.className='spark';sp.textContent=m;sp.style.setProperty('--dx',`${Math.cos(i*Math.PI/4)*150}px`);sp.style.setProperty('--dy',`${Math.sin(i*Math.PI/4)*120}px`);wrap.appendChild(sp)});
+  document.body.appendChild(wrap); setTimeout(()=>wrap.remove(),1800);
+}
+
+function newQuiz(){quizQs=quizBase.map(q=>{let opts=shuffle(q[1]);return [q[0],opts,q[2],q[3]]});qi=0;score=0;miss=[];renderQuiz()}
+function renderQuiz(){if(qi>=quizQs.length){let title=score===15?'Index Laws Mastery 🏅':score>=12?'Index Laws Expert':score>=9?'Index Laws Explorer':'Keep Building';quizMount.innerHTML=`<div class="badge-result"><h3>${title}</h3><div style="font-size:2rem;font-weight:800;color:var(--ad)">${score}/15</div><p>${score===15?'Outstanding — every question correct.':miss.length?'Review: '+[...new Set(miss.map(x=>L[x]?.t||'Mixed Laws'))].join(', ')+'.':'Quiz complete.'}</p><button class="small" id="retryQuiz">Try again</button></div>`;document.getElementById('retryQuiz').addEventListener('click',newQuiz);P.v.quiz=1;P.done.quiz=score>=12;save();upd();if(score>=12) setTimeout(()=>celebrate(score===15?'🏅 Index Laws Mastery!':'★ Quiz complete — great work!'),120);return}let q=quizQs[qi];quizMount.innerHTML=`<div class="quiz-card"><div class="quiz-meta"><span>Question ${qi+1} of ${quizQs.length}</span><span>${qi<5?'Simple Familiar':qi<10?'Complex Familiar':'Complex Unfamiliar'}</span></div><div class="q math">${fmt(q[0])}</div><div class="quiz-options">${q[1].map((a,i)=>`<button data-a="${a.replaceAll('"','&quot;')}" class="math">${'ABCD'[i]}. ${fmt(a)}</button>`).join('')}</div><div class="feedback" id="qfeed"></div><button class="small" id="qnext">Next question</button></div>`;document.querySelectorAll('.quiz-options button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.quiz-options button').forEach(x=>x.disabled=true);if(b.dataset.a===q[2]){b.classList.add('correct');score++;qfeed.textContent='Correct.'}else{b.classList.add('wrong');[...document.querySelectorAll('.quiz-options button')].find(x=>x.dataset.a===q[2])?.classList.add('correct');qfeed.textContent='Not quite — the correct answer is highlighted.';miss.push(q[3])}document.getElementById('qnext').style.display='block'}));document.getElementById('qnext').addEventListener('click',()=>{qi++;renderQuiz()})}
+newQuiz();
+document.getElementById("glossaryGrid").innerHTML=Object.entries(glossary).map(([k,v])=>`<div class="glossary-card"><b>${k}</b><br>${v}</div>`).join("");
+
+
+
+const realWorldData=[
+  {text:"🚀 Space travel",correct:true},
+  {text:"🚗 Driving a car",correct:false},
+  {text:"🦠 Bacterial growth",correct:true},
+  {text:"🍳 Following a basic recipe",correct:false},
+  {text:"🏊 Volume of water in an Olympic-sized swimming pool",correct:true},
+  {text:"💰 Starting a compounding savings account",correct:true},
+  {text:"🛒 Writing a shopping list",correct:false},
+  {text:"🔬 Atomic-scale measurements",correct:true}
+];
+if(document.getElementById('realOptions')){
+  realOptions.innerHTML=realWorldData.map((x,i)=>`<button data-i="${i}" type="button">${x.text}</button>`).join('');
+  realOptions.addEventListener('click',e=>{if(e.target.tagName==='BUTTON'){e.target.classList.toggle('selected');e.target.classList.remove('correct','wrong')}});
+  checkRealWorld.addEventListener('click',()=>{
+    let allCorrect=true;
+    realWorldData.forEach((x,i)=>{
+      const b=realOptions.querySelector(`button[data-i="${i}"]`);
+      const chosen=b.classList.contains('selected');
+      b.classList.remove('correct','wrong');
+      if(chosen===x.correct){if(chosen)b.classList.add('correct')}
+      else{allCorrect=false;if(chosen)b.classList.add('wrong')}
+    });
+    realFeedback.textContent=allCorrect?'Correct — Real World complete.':'Not quite — reread the examples and try again.';
+    if(allCorrect){P.done.realworld=1;save();upd()}
+  });
+}
+
+const indicesTFData=[
+  {text:"In 2⁴, the base is 2.",answer:true},
+  {text:"In 2⁴, the smaller raised number 4 is the base.",answer:false},
+  {text:"2³ means 2 × 2 × 2.",answer:true},
+  {text:"The cube root of 8 is 2 because 2 × 2 × 2 = 8.",answer:true},
+  {text:"To evaluate 3², calculate 3 × 2.",answer:false}
+];
+if(document.getElementById('indicesTF')){
+  indicesTF.innerHTML=indicesTFData.map((q,i)=>`<div class="tf-row"><span><b>${i+1}.</b> ${q.text}</span><span class="tf-options"><button data-q="${i}" data-v="true">True</button><button data-q="${i}" data-v="false">False</button></span></div>`).join('');
+  indicesTF.addEventListener('click',e=>{
+    if(e.target.tagName!=='BUTTON')return;
+    const q=e.target.dataset.q;
+    indicesTF.querySelectorAll(`button[data-q="${q}"]`).forEach(b=>b.classList.remove('selected','correct','wrong'));
+    e.target.classList.add('selected');
+  });
+  checkIndicesTF.addEventListener('click',()=>{
+    let score=0;
+    indicesTFData.forEach((q,i)=>{
+      const chosen=indicesTF.querySelector(`button[data-q="${i}"].selected`);
+      indicesTF.querySelectorAll(`button[data-q="${i}"]`).forEach(b=>b.classList.remove('correct','wrong'));
+      if(chosen){
+        const ok=(chosen.dataset.v==='true')===q.answer;
+        chosen.classList.add(ok?'correct':'wrong');
+        if(ok)score++;
+      }
+    });
+    indicesTFFeedback.textContent=`${score} of ${indicesTFData.length} correct`+(score===5?' — Indices complete.':' — check the statements and try again.');
+    if(score===5){P.done.indices=1;save();upd()}
+  });
+}
+
+const clozeData=[
+  {before:"In ",options:["2⁵","5²"],after:", the number 2 is the base and 5 is the index.",correct:0},
+  {before:"The top part of a fraction is the ",options:["numerator","denominator"],after:".",correct:0},
+  {before:"The bottom part of a fraction is the ",options:["numerator","denominator"],after:".",correct:1},
+  {before:"The answer to a multiplication is called the ",options:["product","quotient"],after:".",correct:0},
+  {before:"The answer to a division is called the ",options:["product","quotient"],after:".",correct:1},
+  {before:"A square ",options:["root","coefficient"],after:" undoes a square power.",correct:0}
+];
+if(document.getElementById('clozeQuestions')){
+  clozeQuestions.innerHTML=clozeData.map((q,i)=>`<div class="cloze-row"><b>${i+1}.</b> ${q.before}<span class="cloze-options">${q.options.map((o,j)=>`<button data-q="${i}" data-o="${j}">${o}</button>`).join('')}</span>${q.after}</div>`).join('');
+  clozeQuestions.addEventListener('click',e=>{
+    if(e.target.tagName!=='BUTTON')return;
+    const q=e.target.dataset.q;
+    clozeQuestions.querySelectorAll(`button[data-q="${q}"]`).forEach(b=>b.classList.remove('selected','correct','wrong'));
+    e.target.classList.add('selected');
+  });
+  checkCloze.addEventListener('click',()=>{
+    let score=0;
+    clozeData.forEach((q,i)=>{
+      const chosen=clozeQuestions.querySelector(`button[data-q="${i}"].selected`);
+      clozeQuestions.querySelectorAll(`button[data-q="${i}"]`).forEach(b=>b.classList.remove('correct','wrong'));
+      if(chosen){
+        if(+chosen.dataset.o===q.correct){chosen.classList.add('correct');score++}
+        else chosen.classList.add('wrong');
+      }
+    });
+    clozeFeedback.textContent=`${score} of ${clozeData.length} correct`+(score>=5?' — glossary complete.':' — review the glossary and try again.');
+    if(score>=5){P.done.glossary=1;save();upd()}
+  });
+}
+const order=["overview","realworld","glossary","indices","product","quotient","power","zero","negative","independent","quiz"];
+document.querySelectorAll('.section').forEach(sec=>{let i=order.indexOf(sec.id);let d=document.createElement('div');d.className='page-nav';if(sec.id==='quiz'){d.innerHTML=`${i>0?`<button data-go="${order[i-1]}">← Previous</button>`:'<span></span>'}<button data-go="overview">Return to Overview</button>`}else{d.innerHTML=`${i>0?`<button data-go="${order[i-1]}">← Previous</button>`:'<span></span>'}${i<order.length-1?`<button class="next" data-go="${order[i+1]}">Next →</button>`:'<span></span>'}`}sec.appendChild(d)});
+const secs=[...document.querySelectorAll('.section')],nav=[...document.querySelectorAll('[data-target]')];
+function show(id){secs.forEach(s=>s.classList.toggle('active',s.id===id));nav.forEach(b=>b.classList.toggle('active',b.dataset.target===id));if(id==='indices'||id==='realworld'||id==='glossary'||id==='independent'||id==='quiz'||L[id]){P.v[id]=1;save();upd()}scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-target]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.target)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+document.querySelectorAll('.whybtn').forEach(b=>b.addEventListener('click',()=>{let x=b.nextElementSibling;x.classList.toggle('show');b.textContent=x.classList.contains('show')?'Hide explanation':'Why does this work?'}));document.querySelectorAll('.reveal').forEach(b=>b.addEventListener('click',()=>{let s=b.nextElementSibling;s.classList.toggle('show');b.textContent=s.classList.contains('show')?'Hide working':'Reveal working'}));
+Object.keys(L).forEach(id=>{let s=document.getElementById(id),bs=[...s.querySelectorAll('.mcq button')],f=s.querySelector('.feedback'),lock=s.querySelector('.locked');bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.remove('correct','wrong'));if(+b.dataset.i===L[id].m[2]){b.classList.add('correct');f.textContent='Correct — the worked questions are now unlocked.';P.c[id]=1;lock.classList.remove('lock');save();upd()}else{b.classList.add('wrong');f.textContent='Not quite — try again.'}}))});
+let selected=null;document.querySelectorAll('.chip').forEach(c=>{c.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('selected'));selected=c;c.classList.add('selected')});c.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',c.dataset.a))});
+function place(z,a){let old=z.dataset.a;if(old){let oc=[...z.closest('.panel').querySelectorAll('.chip')].find(c=>c.dataset.a===old&&c.style.display==='none');if(oc)oc.style.display=''}z.dataset.a=a;z.innerHTML=fmt(a);z.classList.remove('correct','incorrect');let c=[...z.closest('.panel').querySelectorAll('.chip')].find(c=>c.dataset.a===a&&c.style.display!=='none');if(c)c.style.display='none'}
+document.querySelectorAll('.drop').forEach(z=>{z.addEventListener('dragover',e=>e.preventDefault());z.addEventListener('drop',e=>{e.preventDefault();place(z,e.dataTransfer.getData('text/plain'))});z.addEventListener('click',()=>{if(selected){place(z,selected.dataset.a);selected.classList.remove('selected');selected=null}})});
+document.querySelectorAll('.check').forEach(b=>b.addEventListener('click',()=>{let s=b.closest('.section'),id=s.id,z=[...s.querySelectorAll('.drop')],n=0;z.forEach((x,i)=>{let ok=x.dataset.a===L[id].p[i][1];x.classList.toggle('correct',ok);x.classList.toggle('incorrect',!ok);if(ok)n++});let f=s.querySelector('.pfb');f.textContent=n===z.length?`${n} of ${z.length} correct — practice complete.`:`${n} of ${z.length} correct — check the highlighted answers and try again.`;if(n===z.length){P.p[id]=1;save();upd()}}));
+function upd(){
+  const learn=['indices','product','quotient','power','zero','negative'];
+  let earned=0,total=18;
+  learn.forEach(id=>{
+    if(id==='indices'){if(P.done.indices)earned++}
+    else{
+      if(P.v[id]) earned++;
+      if(L[id]&&P.c[id]) earned++;
+      if(L[id]&&P.p[id]) earned++;
+    }
+  });
+  if(P.done.realworld) earned++;
+  if(P.done.glossary) earned++;
+  if(P.done.quiz) earned++;
+  if(P.done.independent) earned++;
+  total += 4;
+  let pc=Math.round(earned/total*100);
+  bar.style.width=pc+'%';
+  let explored=['indices','product','quotient','power','zero','negative','realworld'].filter(i=>P.v[i]).length;
+  let cc=Object.keys(L).filter(i=>P.c[i]).length+(P.done.indices?1:0)+(P.done.realworld?1:0)+(P.done.glossary?1:0);
+  ptext.textContent=`${pc}% complete • ${explored} topics • ${cc} checks`;if(pc===100&&!celebrated100){celebrated100=true;setTimeout(()=>celebrate('✦ 100% complete — Index Laws finished!'),150)}
+
+  nav.forEach(b=>{
+    let id=b.dataset.target;
+    b.classList.remove('visited','complete');
+    if(id==='overview') return;
+    if(id==='glossary'){if(P.done.glossary)b.classList.add('complete');else if(P.v.glossary)b.classList.add('visited');return;}
+    if(id==='quiz'){
+      if(P.done.quiz)b.classList.add('complete'); else if(P.v.quiz)b.classList.add('visited');
+    } else if(id==='independent'){
+      if(P.done.independent)b.classList.add('complete'); else if(P.v.independent)b.classList.add('visited');
+    } else if(id==='indices'){
+      if(P.done.indices)b.classList.add('complete'); else if(P.v.indices)b.classList.add('visited');
+    } else if(id==='realworld'){
+      if(P.done.realworld)b.classList.add('complete'); else if(P.v.realworld)b.classList.add('visited');
+    } else if(L[id]){
+      if(P.c[id]&&P.p[id])b.classList.add('complete'); else if(P.v[id])b.classList.add('visited');
+    }
+  });
+
+  document.querySelectorAll('[data-status]').forEach(el=>{
+    const id=el.dataset.status;
+    let label='Not explored', cls='';
+    if(id==='glossary'){
+      if(P.done.glossary){label='Completed';cls='done'} else if(P.v.glossary){label='In progress';cls='vis'} else label='Not attempted';
+    } else if(id==='quiz'){
+      if(P.done.quiz){label='Completed';cls='done'} else if(P.v.quiz){label='Attempted';cls='vis'} else label='Not attempted';
+    } else if(id==='independent'){
+      if(P.done.independent){label='Completed';cls='done'} else if(P.v.independent){label='Visited';cls='vis'} else label='Not attempted';
+    } else if(id==='indices'){
+      if(P.done.indices){label='Completed';cls='done'} else if(P.v.indices){label='In progress';cls='vis'}
+    } else if(id==='realworld'){
+      if(P.done.realworld){label='Completed';cls='done'} else if(P.v.realworld){label='In progress';cls='vis'}
+    } else if(L[id]){
+      if(P.c[id]&&P.p[id]){label='Completed';cls='done'}
+      else if(P.v[id]){label='In progress';cls='vis'}
+    }
+    el.textContent=label;el.classList.remove('vis','done');if(cls)el.classList.add(cls);
+  });
+}
+reset.addEventListener("click",()=>{if(confirm("Reset all progress?")){["il5_v","il5_c","il5_p","il5_done"].forEach(k=>localStorage.removeItem(k));location.reload()}});upd();
+</script>
+</body>
+</html>
